@@ -18,9 +18,14 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 // $ltags = $repotags->finAll();
 // $this->faker->randomElement($ltags);
 
-// $repoproject = $this->manager->getRepository(Project::class);
-// $lproject = $repoproject->findAll();
-// $this->faker->randomElements($lproject)
+// $htmlTag = $repository->find(1);
+// $cssTag = $repository->find(2);
+// $jslTag = $repository->find(3);
+
+// éléments de code réutiliser dans vos boucles
+// $html = $tags[0];
+// $html->getName();
+// $tags[0]->getName();
 
 
 
@@ -48,87 +53,49 @@ class TestFixtures extends Fixture implements FixtureGroupInterface
         $this->loadTags();
         $this->loadProjects();
         $this->loadSchoolYears();
-        $this->loadUsers();
         $this->loadStudents();
-    }
-
-    public function loadStudents()
-    {
-        $reposchoolyear = $this->manager->getRepository(SchoolYear::class);
-        $lschoolyear = $reposchoolyear->findAll();
-
-        $datas = [
-            [
-                'firstName' => 'Foo',
-                'lastName' => 'Toto',
-                'schoolYearId' => $lschoolyear[0],
-            ],
-            [
-                'firstName' => 'Bar',
-                'lastName' => 'Tata',
-                'schoolYearId' => $lschoolyear[2],
-            ],
-            [
-                'firstName' => 'Baz',
-                'lastName' => 'Titi',
-                'schoolYearId' => $lschoolyear[3],
-            ],
-        ];
-
-        // données statique 
-
-        foreach ($datas as $data) {
-            $student = new Student();
-            $student->setFirstName($data['firstName']);
-            $student->setLastName($data['lastName']);
-            $student->setSchoolYear($data['schoolYearId']);
-
-            $this->manager->persist($student);
-        }
-
-        $this->manager->flush();
-
-        // données dynamique
-
-        for ($i = 0; $i < 10; $i++) {
-            $student = new Student();
-            $words = random_int(1, 3);
-            $student->setFirstName($this->faker->sentence($words));
-            $student->setLastName($this->faker->sentence($words));
-            $student->setSchoolYear($this->faker->randomElement($lschoolyear));
-
-            $this->manager->persist($student);
-        }
-
-        $this->manager->flush();
     }
 
     public function loadProjects()
     {
+        $repoTags = $this->manager->getRepository(Tag::class);
+        $tags = $repoTags->findAll();
+        // $this->faker->randomElement($tags);
+
+        // on récupère un tag a partir de son id
+        $htmlTag = $repoTags->find(1);
+        $cssTag = $repoTags->find(2);
+
+        // on récupère 
+        $jsTag = $tags[2];
+
         $datas = [
             [
                 'name' => 'P11',
                 'description' => null,
                 'clientName' => 'Toto',
-                'startDate' => null,
-                'checkpointDate' => null,
-                'deliveryDate' => null,
+                'startDate' => new DateTime('2022-01-01'),
+                'checkpointDate' => new DateTime('2022-06-01'),
+                'deliveryDate' => new DateTime('2023-01-01'),
+                'tags' => [$htmlTag],
             ],
             [
                 'name' => 'P12',
                 'description' => null,
                 'clientName' => 'Titi',
-                'startDate' => null,
-                'checkpointDate' => null,
-                'deliveryDate' => null,
+                'startDate' => new DateTime('2022-01-01'),
+                'checkpointDate' => new DateTime('2022-06-01'),
+                'deliveryDate' => new DateTime('2023-01-01'),
+                'tags' => [$cssTag],
             ],
             [
                 'name' => 'P13',
                 'description' => null,
                 'clientName' => 'Tata',
-                'startDate' => null,
-                'checkpointDate' => null,
-                'deliveryDate' => null,
+                'startDate' => new DateTime('2022-01-01'),
+                'checkpointDate' => new DateTime('2022-06-01'),
+                'deliveryDate' => new DateTime('2023-01-01'),
+                'tags' => [$jsTag],
             ],
         ];
 
@@ -143,6 +110,10 @@ class TestFixtures extends Fixture implements FixtureGroupInterface
             $project->setCheckpointDate($data['checkpointDate']);
             $project->setDeliveryDate($data['deliveryDate']);
 
+            foreach ($data['tags'] as $tag) {
+                $project->addTag($tag);
+            }
+
             $this->manager->persist($project);
         }
 
@@ -150,20 +121,30 @@ class TestFixtures extends Fixture implements FixtureGroupInterface
 
         // données dynamique
 
-        for ($i = 0; $i < 10; $i++) {
+        for ($i = 0; $i < 30; $i++) {
             $project = new Project();
             $words = random_int(1, 2);
             $project->setName($this->faker->sentence($words));
-            $words = random_int(2, 3);
-            $project->setDescription($this->faker->sentence($words));
-            $words = random_int(3, 10);
-            $project->setClientName($this->faker->sentence($words));
-            $startDate = $this->faker->dateTimeBetween('-1 year', '- 3months');
+            $words = random_int(2, 10);
+            $project->setDescription($this->faker->optional(0.7)->sentence($words));
+            $project->setClientName($this->faker->name());
+            $startDate = $this->faker->dateTimeBetween('-1 year', '-8months');
             $project->setStartDate($startDate);
-            $checkpointDate = $this->faker->dateTimeBetween('- 6 months', '-1months');
+            $checkpointDate = $this->faker->dateTimeBetween('-7 months', '-2months');
             $project->setCheckpointDate($checkpointDate);
-            $deliveryDate = $this->faker->dateTimeBetween('- 1 months', 'now');
+            $deliveryDate = $this->faker->dateTimeBetween('-1 months', 'now');
             $project->setDeliveryDate($deliveryDate);
+
+            // on choisit le nombre de tags au hasard entre 1 et 4
+            $tagsCount = random_int(1, 4);
+            // on choisit des tags au hasard depuis la liste complète
+            $shortList = $this->faker->randomElements($tags, $tagsCount);
+
+            // on passe revue chaque tag de la short list
+            foreach ($shortList as $tag) {
+                // on associe un tag avec le projet
+                $project->addTag($tag);
+            }
 
             $this->manager->persist($project);
         }
@@ -216,8 +197,10 @@ class TestFixtures extends Fixture implements FixtureGroupInterface
             $schoolyear->setName($this->faker->unique()->sentence($words));
             $words = random_int(2, 10);
             $schoolyear->setDescription($this->faker->optional(0.7)->sentence($words));
+
             $startDate = $this->faker->dateTimeBetween('-1 year', '- 6months');
             $schoolyear->setStartDate($startDate);
+
             $endDate = $this->faker->dateTimeBetween('- 3 months', 'now');
             $schoolyear->setEndDate($endDate);
 
@@ -265,28 +248,59 @@ class TestFixtures extends Fixture implements FixtureGroupInterface
         $this->manager->flush();
     }
 
-    public function loadUsers(): void
+    public function loadStudents(): void
     {
+        $repoSchoolYear = $this->manager->getRepository(SchoolYear::class);
+        $schoolYears = $repoSchoolYear->findAll();
+        $repoTag = $this->manager->getRepository(Tag::class);
+        $tags = $repoTag->findAll();
+        $repoProject = $this->manager->getRepository(Project::class);
+        $projects = $repoProject->findAll();
+
+        $siteVitrine = $repoProject->find(1);
+        $wordPress = $repoProject->find(2);
+        $apiRest = $repoProject->find(3);
+
+        $htmlTag = $repoTag->find(1);
+        $cssTag = $repoTag->find(2);
+        $jsTag = $repoTag->find(3);
+
         // Données statiques
         $datas = [
             [
                 'email' => 'alice@example.com',
                 'password' => '123',
                 'roles' => ['ROLE_USER'],
+                'firstName' => 'Foo',
+                'lastName' => 'Example',
+                'schoolYear' => $schoolYears[0],
+                'projects' => [$siteVitrine],
+                'tags' => [$htmlTag],
             ],
             [
                 'email' => 'bob@example.com',
                 'password' => '123',
                 'roles' => ['ROLE_USER'],
+                'firstName' => 'Bar',
+                'lastName' => 'Example',
+                'schoolYear' => $schoolYears[1],
+                'projects' => [$wordPress],
+                'tags' => [$cssTag],
             ],
             [
                 'email' => 'charlie@example.com',
                 'password' => '123',
                 'roles' => ['ROLE_USER'],
+                'firstName' => 'Baz',
+                'lastName' => 'Example',
+                'schoolYear' => $schoolYears[2],
+                'projects' => [$apiRest],
+                'tags' => [$jsTag],
             ],
         ];
 
         foreach ($datas as $data) {
+
             $user = new User();
             $user->setEmail($data['email']);
             $password = $this->hasher->hashPassword($user, $data['password']);
@@ -294,22 +308,124 @@ class TestFixtures extends Fixture implements FixtureGroupInterface
             $user->setRoles($data['roles']);
             // Persist sert a stocker l'user dans la base de donner
             $this->manager->persist($user);
+
+            $student = new Student();
+            $student->setFirstName($data['firstName']);
+            $student->setLastName($data['lastName']);
+            $student->setSchoolYear($data['schoolYear']);
+            $student->setUser($user);
+
+            // récupération du premier projet de la liste du student
+            $project = $data['projects'][0];
+            $student->addProject($project);
+
+            $tag = $data['tags'][0];
+            $student->addTag($tag);
+
+
+            $this->manager->persist($student);
         }
 
-        // flush = push du user dans la base de donner
+
         $this->manager->flush();
 
-        // données dynamiques
-        for ($i = 0; $i < 10; $i++) {
+        // flush = push du user dans la base de donner
+
+        // // données dynamiques
+        for ($i = 0; $i < 50; $i++) {
             $user = new User();
             $user->setEmail($this->faker->unique()->safeEmail());
             $password = $this->hasher->hashPassword($user, $data['password']);
             $user->setPassword($password);
             $user->setRoles(['ROLE_USER']);
-            // Persist sert a stocker l'user dans la base de donner
+
+            $student = new Student();
+            $student->setFirstname($this->faker->firstName());
+            $student->setLastname($this->faker->lastName());
+
+            $schoolYear = $this->faker->randomElement($schoolYears);
+            $student->setSchoolYear($schoolYear);
+
+            $project = $this->faker->randomElement($projects);
+            $student->addProject($project);
+
+            $tag = $this->faker->randomElement($tags);
+            $student->addTag($this->faker->randomElement($tags));
+
+            $student->setUser($user);
+
+
+
             $this->manager->persist($user);
         }
         $this->manager->flush();
-        // flush = push du user dans la base de donner
     }
+
+    // public function loadStudents()
+    // {
+    //     $repoSchoolYear = $this->manager->getRepository(SchoolYear::class);
+    //     $schoolYears = $repoSchoolYear->findAll();
+
+    //     $datas = [
+    //         [
+    //             'firstName' => 'Foo',
+    //             'lastName' => 'Toto',
+    //             'schoolYearId' => $schoolYears[0],
+    //             'tags' => $tags[0],
+    //         ],
+    //         [
+    //             'firstName' => 'Bar',
+    //             'lastName' => 'Tata',
+    //             'schoolYearId' => $schoolYears[2],
+    //             'tags' => $tags[1],
+    //         ],
+    //         [
+    //             'firstName' => 'Baz',
+    //             'lastName' => 'Titi',
+    //             'schoolYearId' => $schoolYears[3],
+    //             'tags' => $tags[2],
+    //         ],
+    //     ];
+
+    //     // données statique 
+
+    //     foreach ($datas as $data) {
+    //         $student = new Student();
+    //         $student->setFirstName($data['firstName']);
+    //         $student->setLastName($data['lastName']);
+    //         $student->setSchoolYear($data['schoolYearId']);
+
+    //         foreach ($data['tags'] as $tag) {
+    //             $student->addTag($tag);
+    //         }
+
+    //         $this->manager->persist($student);
+    //     }
+
+    //     $this->manager->flush();
+
+    //     // données dynamique
+
+    //     for ($i = 0; $i < 17; $i++) {
+    //         $student = new Student();
+    //         $words = random_int(1, 3);
+    //         $student->setFirstName($this->faker->sentence($words));
+    //         $student->setLastName($this->faker->sentence($words));
+    //         $student->setSchoolYear($this->faker->randomElement($schoolYears));
+
+    //         $tagsCount = random_int(1, 4);
+    //         // on choisit des tags au hasard depuis la liste complète
+    //         $shortList = $this->faker->randomElements($tags, $tagsCount);
+
+    //         // on passe revue chaque tag de la short list
+    //         foreach ($shortList as $tag) {
+    //             // on associe un tag avec le projet
+    //             $student->addTag($tag);
+    //         }
+
+    //         $this->manager->persist($student);
+    //     }
+
+    //     $this->manager->flush();
+    // }
 }
