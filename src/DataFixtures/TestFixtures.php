@@ -285,7 +285,7 @@ class TestFixtures extends Fixture implements FixtureGroupInterface
                 'lastName' => 'Example',
                 'schoolYear' => $schoolYears[1],
                 'projects' => [$wordPress],
-                'tags' => [$cssTag],
+                'tags' => [$cssTag, $htmlTag],
             ],
             [
                 'email' => 'charlie@example.com',
@@ -319,8 +319,12 @@ class TestFixtures extends Fixture implements FixtureGroupInterface
             $project = $data['projects'][0];
             $student->addProject($project);
 
-            $tag = $data['tags'][0];
-            $student->addTag($tag);
+
+            foreach ($data['tags'] as $tag) {
+                $student->addTag($tag);
+            }
+            // $tag = $data['tags'][0];
+            // $student->addTag($tag);
 
 
             $this->manager->persist($student);
@@ -349,8 +353,11 @@ class TestFixtures extends Fixture implements FixtureGroupInterface
             $project = $this->faker->randomElement($projects);
             $student->addProject($project);
 
-            $tag = $this->faker->randomElement($tags);
-            $student->addTag($this->faker->randomElement($tags));
+            $tagsCount = random_int(1, 4);
+            $shortList = $this->faker->randomElements($tags, $tagsCount);
+            foreach ($shortList as $tag) {
+                $student->addTag($tag);
+            }
 
             $student->setUser($user);
 
@@ -360,72 +367,4 @@ class TestFixtures extends Fixture implements FixtureGroupInterface
         }
         $this->manager->flush();
     }
-
-    // public function loadStudents()
-    // {
-    //     $repoSchoolYear = $this->manager->getRepository(SchoolYear::class);
-    //     $schoolYears = $repoSchoolYear->findAll();
-
-    //     $datas = [
-    //         [
-    //             'firstName' => 'Foo',
-    //             'lastName' => 'Toto',
-    //             'schoolYearId' => $schoolYears[0],
-    //             'tags' => $tags[0],
-    //         ],
-    //         [
-    //             'firstName' => 'Bar',
-    //             'lastName' => 'Tata',
-    //             'schoolYearId' => $schoolYears[2],
-    //             'tags' => $tags[1],
-    //         ],
-    //         [
-    //             'firstName' => 'Baz',
-    //             'lastName' => 'Titi',
-    //             'schoolYearId' => $schoolYears[3],
-    //             'tags' => $tags[2],
-    //         ],
-    //     ];
-
-    //     // données statique 
-
-    //     foreach ($datas as $data) {
-    //         $student = new Student();
-    //         $student->setFirstName($data['firstName']);
-    //         $student->setLastName($data['lastName']);
-    //         $student->setSchoolYear($data['schoolYearId']);
-
-    //         foreach ($data['tags'] as $tag) {
-    //             $student->addTag($tag);
-    //         }
-
-    //         $this->manager->persist($student);
-    //     }
-
-    //     $this->manager->flush();
-
-    //     // données dynamique
-
-    //     for ($i = 0; $i < 17; $i++) {
-    //         $student = new Student();
-    //         $words = random_int(1, 3);
-    //         $student->setFirstName($this->faker->sentence($words));
-    //         $student->setLastName($this->faker->sentence($words));
-    //         $student->setSchoolYear($this->faker->randomElement($schoolYears));
-
-    //         $tagsCount = random_int(1, 4);
-    //         // on choisit des tags au hasard depuis la liste complète
-    //         $shortList = $this->faker->randomElements($tags, $tagsCount);
-
-    //         // on passe revue chaque tag de la short list
-    //         foreach ($shortList as $tag) {
-    //             // on associe un tag avec le projet
-    //             $student->addTag($tag);
-    //         }
-
-    //         $this->manager->persist($student);
-    //     }
-
-    //     $this->manager->flush();
-    // }
 }
