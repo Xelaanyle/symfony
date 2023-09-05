@@ -51,21 +51,6 @@ class TestController extends AbstractController
 
         // pas la peine d'appeler persist si l'objet existe dans la bdd
         $em->flush();
-        
-        $studentRepository = $em->getRepository(Student::class);
-        $student = $studentRepository->find(1);
-        
-        
-        // récupération de l'objet dont l'id est 4
-        $tag4 = $repository->find(4);
-
-        // modification d'un objet
-        $tag4->setName('Python');
-        $tag4->setDescription(null);
-
-        // association du tag 4 au student 1
-        $student->addTag($tag4);
-        $em->flush();
 
         // récupération d'un tag dont le nom est CSS
         $cssTag = $repository->findOneBy([
@@ -96,6 +81,31 @@ class TestController extends AbstractController
         $keywordTags1 = $repository->findByKeyword('HTML');
         $keywordTags2 = $repository->findByKeyword('ipsum');
 
+        // récupération de tags a partir d'une school year 
+        $reposchoolYears = $em->getRepository(schoolYear::class);
+        $schoolYear = $reposchoolYears->find(1);
+        $schoolYearTags = $repository->findBySchoolYear($schoolYear);
+
+        // mise à jour des relations d'un tag
+
+        $studentRepository = $em->getRepository(Student::class);
+        $student = $studentRepository->find(2);
+        $tag1 = $repository->find(1);
+        $tag1->addStudent($student);
+        $em->flush();
+
+
+        // récupération de l'objet dont l'id est 4
+        $tag4 = $repository->find(4);
+
+        // modification d'un objet
+        $tag4->setName('Python');
+        $tag4->setDescription(null);
+
+        // association du tag 4 au student 1
+        $student->addTag($tag4);
+        $em->flush();
+
         $title = 'Test des tags';
 
         return $this->render('test/tag.html.twig', [
@@ -107,6 +117,8 @@ class TestController extends AbstractController
             'notNullDescriptionTags' => $notNullDescriptionTags,
             'keywordTags1' => $keywordTags1,
             'keywordTags2' => $keywordTags2,
+            'schoolYearId' => $schoolYearTags,
+            'tag1' => $tag1,
         ]);
     }
 

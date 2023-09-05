@@ -5,17 +5,24 @@
 {% endblock %}
 
 {% block body %}
-<style>h2, h1{color: red}</style>
+	<style>
+		h2,
+		h1 {
+			color: red
+		}
+	</style>
 	<h1>{{ title }}</h1>
-	<h3>{{ tag.name }} (id{{ tag.id }})</h3>
+	<h3>{{ tag.name }}
+		(id{{ tag.id }})</h3>
 	<p>
 		{{ tag.description }}
 	</p>
-	<h3>{{ cssTag.name }} (id{{ cssTag.id }})</h3>
+	<h3>{{ cssTag.name }}
+		(id{{ cssTag.id }})</h3>
 	<p>
 		{{ cssTag.description }}
 	</p>
-    <h2>Liste des Tags</h2>
+	<h2>Liste des Tags</h2>
 	{% for tag in tags %}
 		<h3>
 			{{ tag.name }}{{ tag.id }}
@@ -24,8 +31,9 @@
 			{{ tag.description }}
 		</p>
 	{% endfor %}
-    <h2> Résultat des recherches par déscription null</h2>
-    {% for tag in nullDescriptionTags %}
+	<h2>
+		Résultat des recherches par déscription null</h2>
+	{% for tag in nullDescriptionTags %}
 		<h3>
 			{{ tag.name }}{{ tag.id }}
 		</h3>
@@ -33,8 +41,9 @@
 			{{ tag.description }}
 		</p>
 	{% endfor %}
-    <h2> Résultat des recherches par déscription non null</h2>
-    {% for tag in notNullDescriptionTags %}
+	<h2>
+		Résultat des recherches par déscription non null</h2>
+	{% for tag in notNullDescriptionTags %}
 		<h3>
 			{{ tag.name }}{{ tag.id }}
 		</h3>
@@ -42,8 +51,9 @@
 			{{ tag.description }}
 		</p>
 	{% endfor %}
-    <h2> Résultat des recherches avec le mot clé 'HTML' dans le nom et la déscription</h2>
-    {% for tag in keywordTags1 %} 
+	<h2>
+		Résultat des recherches avec le mot clé 'HTML' dans le nom et la déscription</h2>
+	{% for tag in keywordTags1 %}
 		<h3>
 			{{ tag.name }}{{ tag.id }}
 		</h3>
@@ -51,8 +61,10 @@
 			{{ tag.description }}
 		</p>
 	{% endfor %}
-    <h2> Résultat des recherches avec le mot clé 'ipsum' dans le nom et la déscritpion </h2>
-    {% for tag in keywordTags2 %}
+	<h2>
+		Résultat des recherches avec le mot clé 'ipsum' dans le nom et la déscritpion
+	</h2>
+	{% for tag in keywordTags2 %}
 		<h3>
 			{{ tag.name }}{{ tag.id }}
 		</h3>
@@ -60,4 +72,25 @@
 			{{ tag.description }}
 		</p>
 	{% endfor %}
+	<h2>
+		Liste des tags d'une school year
+	</h2>
+	{% for tag in schoolYearId %}
+		<h3>
+			{{ tag.name }}{{ tag.id }}
+		</h3>
+		<p>
+			{{ tag.description }}
+		</p>
+	{% endfor %}
+	<h2>
+		Liste des students d'un tag
+	</h2>
+	<ul>
+		{% for students in tag1.students %}
+			<li>{{ students.firstName }}
+				{{ students.lastName }}
+				{{ students.id }}</li>
+		{% endfor %}
+	</ul>
 {% endblock %}
