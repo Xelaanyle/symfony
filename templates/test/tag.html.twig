@@ -42,4 +42,22 @@
 			{{ tag.description }}
 		</p>
 	{% endfor %}
+    <h2> Résultat des recherches avec le mot clé 'HTML' dans le nom et la déscription</h2>
+    {% for tag in keywordTags1 %} 
+		<h3>
+			{{ tag.name }}{{ tag.id }}
+		</h3>
+		<p>
+			{{ tag.description }}
+		</p>
+	{% endfor %}
+    <h2> Résultat des recherches avec le mot clé 'ipsum' dans le nom et la déscritpion </h2>
+    {% for tag in keywordTags2 %}
+		<h3>
+			{{ tag.name }}{{ tag.id }}
+		</h3>
+		<p>
+			{{ tag.description }}
+		</p>
+	{% endfor %}
 {% endblock %}

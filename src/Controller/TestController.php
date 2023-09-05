@@ -92,6 +92,9 @@ class TestController extends AbstractController
         // récupération de la liste complète des objets
         $tags = $repository->findAll();
 
+        // récupération des tags qui contiennent certinas mot-clés
+        $keywordTags1 = $repository->findByKeyword('HTML');
+        $keywordTags2 = $repository->findByKeyword('ipsum');
 
         $title = 'Test des tags';
 
@@ -101,7 +104,9 @@ class TestController extends AbstractController
             'tag' => $tag,
             'cssTag' => $cssTag,
             'nullDescriptionTags' => $nullDescriptionTags,
-            'notNullDescriptionTags' => $notNullDescriptionTags
+            'notNullDescriptionTags' => $notNullDescriptionTags,
+            'keywordTags1' => $keywordTags1,
+            'keywordTags2' => $keywordTags2,
         ]);
     }
 
