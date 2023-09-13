@@ -323,9 +323,6 @@ class TestFixtures extends Fixture implements FixtureGroupInterface
             foreach ($data['tags'] as $tag) {
                 $student->addTag($tag);
             }
-            // $tag = $data['tags'][0];
-            // $student->addTag($tag);
-
 
             $this->manager->persist($student);
         }
