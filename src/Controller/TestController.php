@@ -106,6 +106,7 @@ class TestController extends AbstractController
         $student->addTag($tag4);
         $em->flush();
 
+
         $title = 'Test des tags';
 
         return $this->render('test/tag.html.twig', [
