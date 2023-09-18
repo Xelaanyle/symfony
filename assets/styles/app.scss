@@ -1,0 +1,118 @@
+.form_scollable-checkboxes {
+    height: 10rem;
+    width: 500px;
+    overflow: scroll;
+    margin: 0 auto;
+    margin-top: 10px;
+}
+
+/* Centrer l'ensemble du contenu */
+body {
+    text-align: center;
+    background-color: #121212; /* Fond sombre */
+    color: #fff; /* Texte en blanc */
+}
+
+/* Style des liens comme des boutons */
+a {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    margin: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+a:hover {
+    background-color: #0056b3;
+}
+
+/* Centrer les formulaires */
+form {
+    display: block;
+    margin: 0 auto;
+    max-width: 50%;
+    padding: 20px;
+    border: 1px solid #333; /* Bordure plus sombre */
+    border-radius: 5px;
+    background-color: #222; /* Fond sombre */
+    text-align: center;
+}
+
+
+
+input[type="text"], textarea {
+    width: 100%;
+    padding: 8px;
+    margin: 5px 0;
+    border: 1px solid #444; /* Bordure un peu plus claire */
+    border-radius: 3px;
+    background-color: #333; /* Fond sombre */
+    color: #fff; /* Texte en blanc */
+}
+
+button.btn {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button.btn:hover {
+    background-color: #0056b3;
+}
+
+/* Partie 3/6 - Édition */
+h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #fff; /* Texte en blanc */
+}
+
+/* Partie 4/6 - Liste des éléments */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #444; /* Ligne de séparation plus claire */
+    color: #fff; /* Texte en blanc */
+}
+
+th {
+    background-color: #333; /* Fond sombre */
+}
+
+td.actions {
+    white-space: nowrap;
+}
+
+/* Partie 5/6 - Création */
+h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #fff; /* Texte en blanc */
+}
+
+/* Partie 6/6 - Détail */
+th, td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #444; /* Ligne de séparation plus claire */
+    color: #fff; /* Texte en blanc */
+}
+
+/* Style pour la première ligne (en-tête) */
+table th {
+    background-color: #333; /* Fond sombre */
+}
