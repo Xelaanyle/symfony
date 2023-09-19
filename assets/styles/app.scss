@@ -4,6 +4,7 @@
     overflow: scroll;
     margin: 0 auto;
     margin-top: 10px;
+    text-align: left!important;
 }
 
 /* Centrer l'ensemble du contenu */
@@ -41,8 +42,6 @@ form {
     background-color: #222; /* Fond sombre */
     text-align: center;
 }
-
-
 
 input[type="text"], textarea {
     width: 100%;

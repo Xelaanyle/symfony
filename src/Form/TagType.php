@@ -20,7 +20,7 @@ class TagType extends AbstractType
             // ->add('deletedAt')
             // ->add('createdAt')
             // ->add('updatedAt')
-            // ->add('students')
+            ->add('students')
             ->add('projects',EntityType::class, [
                 'class' => Project::class,
                 'choice_label' => function(Project $project) {
